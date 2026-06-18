@@ -2,7 +2,7 @@
   "name": "aigame",
   "version": "1.0.0",
   "description": "",
-  "main": "electron/main.js",
+  "main": "electron/main.cjs",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -30,15 +30,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@tailwindcss/vite": "^4.1.4",
     "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^9.1.2",
     "electron": "^35.1.4",
     "electron-builder": "^26.0.12",
     "tailwindcss": "^4.1.4",
-    "@tailwindcss/vite": "^4.1.4",
     "wait-on": "^8.0.1"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5"
