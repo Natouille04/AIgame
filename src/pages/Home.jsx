@@ -1,22 +1,38 @@
 import { useEffect, useState } from "react";
 import PurpleButton from "../components/PurpleButton";
+import Loading from "../components/Loading";
 
 export default function Home() {
   const [pageState, setPageState] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const handleAction = (e) => {
-      setPageState(1);
-    }
-
-    window.addEventListener("keydown", handleAction)
-    window.addEventListener("mousedown", handleAction)
-
+    const handleAction = () => setPageState(1);
+    window.addEventListener("keydown", handleAction);
+    window.addEventListener("mousedown", handleAction);
     return () => {
-      window.removeEventListener("keydown", handleAction)
-      window.removeEventListener("mousedown", handleAction)
+      window.removeEventListener("keydown", handleAction);
+      window.removeEventListener("mousedown", handleAction);
+    };
+  }, []);
+
+  useEffect(() => {
+    const onPageLoad = () => {
+      console.log("page loaded");
+      setLoading(false);
+    };
+
+    if (document.readyState === "complete") {
+      onPageLoad();
+    } else {
+      window.addEventListener("load", onPageLoad, false);
+      return () => window.removeEventListener("load", onPageLoad);
     }
-  }, [])
+  }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="w-full h-screen flex flex-col items-center gap-y-15 justify-center background-pattern bg-gray-900 text-white">
