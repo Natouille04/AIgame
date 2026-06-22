@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
+
 import PurpleButton from "../components/PurpleButton";
 import Loading from "../components/Loading";
 import ComputerContainer from "../components/ComputerContainer";
+
+import { createLobby, onPlayerListUpdate, offPlayerListUpdate } from "../scripts/socket.js";
 
 export default function Home() {
   const [pageState, setPageState] = useState(0);
   const [computerState, setComputerState] = useState("base");
   const [loading, setLoading] = useState(true);
+  const [roomCode, setRoomCode] = useState(null);
+  const [players, setPlayers] = useState([]);
 
   useEffect(() => {
     const handleAction = () => setPageState(1);
@@ -30,6 +35,13 @@ export default function Home() {
       window.addEventListener("load", onPageLoad, false);
       return () => window.removeEventListener("load", onPageLoad);
     }
+  }, []);
+
+  useEffect(() => {
+    onPlayerListUpdate((player) => {
+      setPlayers((prev) => [...prev, player]);
+    });
+    return () => offPlayerListUpdate();
   }, []);
 
   if (loading) {
@@ -63,7 +75,18 @@ export default function Home() {
               <p className="w-full h-8"></p>
               <p className="w-full h-8 flex justify-start items-center text-green-600 text-2xl">Select an options below :</p>
 
-              <button onClick={() => { setComputerState("play") }} className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">⠀&gt; PLAY</button>
+              <button
+                onClick={async () => {
+                  setComputerState("play");
+                  const code = await createLobby();
+                  console.log(code);
+                  setRoomCode(code);
+                }}
+
+                className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">
+                ⠀&gt; PLAY
+              </button>
+
               <button onClick={() => { setComputerState("settings") }} className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">⠀&gt; SETTINGS</button>
               <button onClick={() => { setPageState(0) }} className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">⠀&gt; BACK</button>
             </div>
@@ -74,11 +97,28 @@ export default function Home() {
               <p className="w-full h-8 flex justify-start items-center text-green-600 text-2xl">C:\&gt; run lobby</p>
               <p className="w-full h-8"></p>
 
-              <div>
-                
+              <div className="h-full text-green-600 text-2xl">
+                {!roomCode
+                  ? <p className="animate-pulse">Création du lobby...</p>
+                  : <div>
+                    <p>Room code : <span className="font-bold select-text">{roomCode}</span></p>
+                    <p>Players : </p>
+                    <div className="overflow-y-auto">
+                      {players.length === 0
+                        ? <p className="opacity-50">⠀En attente de joueurs...</p>
+                        : players.map((p) => (
+                          <p key={p.id}>⠀&gt; {p.name}</p>
+                        ))
+                      }
+                    </div>
+                  </div>
+                }
               </div>
 
-              <button onClick={() => { setComputerState("base") }} className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">&gt; BACK</button>
+              {players.length > 1 &&
+                <button className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">&gt; START</button>
+              }
+              <button onClick={() => { setComputerState("base"); setRoomCode(null); setPlayers([]); }} className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">&gt; BACK</button>
             </div>
           }
 
