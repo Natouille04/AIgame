@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import PurpleButton from "../components/PurpleButton";
 import Loading from "../components/Loading";
+import ComputerContainer from "../components/ComputerContainer";
 
 export default function Home() {
   const [pageState, setPageState] = useState(0);
+  const [computerState, setComputerState] = useState("base");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,8 +37,8 @@ export default function Home() {
   }
 
   return (
-    <div className="w-full h-screen flex flex-col items-center gap-y-15 justify-center background-pattern bg-gray-900 text-white">
-      { pageState == 0 &&
+    <div className="w-full h-screen p-5 flex flex-col items-center gap-y-15 justify-center background-pattern bg-gray-900 text-white">
+      {pageState == 0 &&
         <>
           <div className="w-70 flex flex-col select-none">
             <p className="text-5xl font-bold CascadiaCode self-start">Promptly</p>
@@ -53,10 +55,52 @@ export default function Home() {
         </>
       }
 
-      { pageState == 1 &&
-        <div className="w-50">
-          <PurpleButton onClick={() => setPageState(0)}>Back</PurpleButton>
-        </div>
+      {pageState == 1 &&
+        <ComputerContainer>
+          {computerState == "base" &&
+            <div>
+              <p className="w-full h-8 flex justify-start items-center text-green-600 text-2xl">C:\&gt; show menu</p>
+              <p className="w-full h-8"></p>
+              <p className="w-full h-8 flex justify-start items-center text-green-600 text-2xl">Select an options below :</p>
+
+              <button onClick={() => { setComputerState("play") }} className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">⠀&gt; PLAY</button>
+              <button onClick={() => { setComputerState("settings") }} className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">⠀&gt; SETTINGS</button>
+              <button onClick={() => { setPageState(0) }} className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">⠀&gt; BACK</button>
+            </div>
+          }
+
+          {computerState == "play" &&
+            <div className="flex flex-col justify-between h-full">
+              <p className="w-full h-8 flex justify-start items-center text-green-600 text-2xl">C:\&gt; run lobby</p>
+              <p className="w-full h-8"></p>
+
+              <div>
+                
+              </div>
+
+              <button onClick={() => { setComputerState("base") }} className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">&gt; BACK</button>
+            </div>
+          }
+
+          {computerState == "settings" &&
+            <form className="flex flex-col justify-between h-full">
+              <div>
+                <p className="w-full h-8 flex justify-start items-center text-green-600 text-2xl">C:\&gt; edit Setting.cfg</p>
+                <p className="w-full h-8"></p>
+                <p className="w-full h-8 flex justify-start items-center text-white bg-green-600 text-2xl">Editing "Setting.cfg" :</p>
+              </div>
+
+              <div className="h-full overflow-auto scrollbar-none flex flex-col justify-start">
+                { /* Options a placée ici plus tard */}
+              </div>
+
+              <div className="flex flex-col">
+                <button className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">&gt; SAVE</button>
+                <button onClick={() => { setComputerState("base") }} className="w-full h-8 flex justify-start items-center text-green-600 hover:text-white hover:bg-green-600 text-2xl">&gt; BACK</button>
+              </div>
+            </form>
+          }
+        </ComputerContainer>
       }
     </div>
   )
