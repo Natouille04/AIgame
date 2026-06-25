@@ -1,10 +1,12 @@
-export default function ComputerContainer({ children }) {
+export default function ComputerContainer({ children, full }) {
     return (
         <div
-            className="relative rounded-[18px] p-14 pb-24 CascadiaCode select-none bg-[#b1a484]"
+            className="relative w-full h-full CascadiaCode select-none bg-[#b1a484]"
             style={{
-                width: 840,
-                height: 640,
+                ...(full
+                    ? { padding: '3.5rem' }
+                    : { padding: '3.5rem', paddingBottom: '6rem', width: 840, height: 640, borderRadius: 18 }
+                ),
                 boxShadow: `
                     inset 0  3px 0   rgba(255,255,255,0.35),
                     inset 3px 0  0   rgba(255,255,255,0.18),
@@ -58,17 +60,19 @@ export default function ComputerContainer({ children }) {
                 </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 h-24 flex flex-row-reverse items-center justify-between gap-6 px-20">
-                <div className="w-3 h-3 rounded-full bg-[#22ff55]" style={{ boxShadow: '0 0 6px #22ff55' }} />
+            {!full &&
+                <div className="absolute bottom-0 left-0 right-0 h-24 flex flex-row-reverse items-center justify-between gap-6 px-20">
+                    <div className="w-3 h-3 rounded-full bg-[#22ff55]" style={{ boxShadow: '0 0 6px #22ff55' }} />
 
-                <div className="flex gap-1">
-                    {[...Array(70)].map((_, i) => (
-                        <div key={i} className="w-0.5 h-5 rounded-full bg-[#8a7a64]" />
-                    ))}
+                    <div className="flex gap-1">
+                        {[...Array(70)].map((_, i) => (
+                            <div key={i} className="w-0.5 h-5 rounded-full bg-[#8a7a64]" />
+                        ))}
+                    </div>
+
+                    <div className="w-4 h-4 rounded-full bg-[#9a8a74]" style={{ boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 1px 3px rgba(0,0,0,0.5)' }} />
                 </div>
-
-                <div className="w-4 h-4 rounded-full bg-[#9a8a74]" style={{ boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 1px 3px rgba(0,0,0,0.5)' }} />
-            </div>
-        </div>
+            }
+        </div >
     );
 }
