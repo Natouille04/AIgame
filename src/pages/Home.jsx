@@ -92,13 +92,13 @@ export default function Home() {
 
               <div className="h-full text-green-600 text-2xl">
                 {!roomCode
-                  ? <p className="animate-pulse">Création du lobby...</p>
+                  ? <p className="animate-pulse">Creating lobby...</p>
                   : <div>
                     <p>Room code : <span className="font-bold select-text">{roomCode}</span></p>
                     <p>Players : </p>
                     <div className="overflow-y-auto">
                       {players.length === 0
-                        ? <p className="opacity-50">⠀En attente de joueurs...</p>
+                        ? <p className="opacity-50"> Waiting for players...</p>
                         : players.map((p) => (
                           <p key={p.id}>⠀&gt; {p.name}</p>
                         ))
